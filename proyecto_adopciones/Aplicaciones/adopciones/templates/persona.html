@@ -36,9 +36,9 @@
                     <a href="{% url 'editarPersona' personaTemporal.id_persona %}" class="btn btn-primary">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </a>
-                    <a href="eliminarPersona/{{personaTemporal.id_persona}}" onclick="eliminarPersona('{{ personaTemporal.id }}');" class="btn btn-danger">
+                    <button type="button" onclick="confirmarEliminacion('{{ personaTemporal.id_persona }}');" class="btn btn-danger">
                         <i class="fa fa-trash"></i>
-                    </a>
+                    </button>
                 </td>
             </tr>
         {% endfor %}
@@ -60,8 +60,9 @@ function confirmarEliminacion(id) {
         if (result.isConfirmed) {
             window.location.href = `/persona/eliminarPersona/${id}/`;
         }
-    })
+    });
 }
 </script>
+
 
 {% endblock %}
