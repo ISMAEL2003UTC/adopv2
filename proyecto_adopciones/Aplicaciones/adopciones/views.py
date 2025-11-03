@@ -39,4 +39,17 @@ def guardarPersona(request):
             direccion=direccion
         )
         return redirect('persona')
+def editarPersona(request, id_persona):
+    persona = Persona.objects.get(id_persona=id_persona)
+
+    if request.method == 'POST':
+        persona.nombre = request.POST['nombre']
+        persona.apellido = request.POST['apellido']
+        persona.telefono = request.POST.get('telefono')
+        persona.email = request.POST.get('email')
+        persona.direccion = request.POST.get('direccion')
+        persona.save()
+        return redirect('persona')
+
+    return render(request, 'editarPersona.html', {'persona': persona}) 
     
