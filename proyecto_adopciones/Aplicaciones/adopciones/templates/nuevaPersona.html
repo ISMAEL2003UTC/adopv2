@@ -5,7 +5,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Registrar Nueva Persona</h2>
 
-    <form id="formPersona" action="{% url 'guardarPersona' %}" method="POST">
+    <form id="formPersona" action="{% url 'guardarPersona' %}" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-3">
@@ -31,6 +31,10 @@
         <div class="mb-3">
             <label for="direccion" class="form-label">Dirección:</label>
             <textarea id="direccion" name="direccion" class="form-control" rows="3" placeholder="Ingrese la dirección"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="imagen" class="form-label">Foto:</label>
+            <input type="file" id="imagen" name="imagen" class="form-control" required>
         </div>
 
         <div class="d-flex justify-content-between">

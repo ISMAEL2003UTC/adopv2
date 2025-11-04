@@ -30,13 +30,15 @@ def guardarPersona(request):
         telefono = request.POST.get('telefono')
         email = request.POST.get('email')
         direccion = request.POST.get('direccion')
+        imagen = request.FILES['imagen']
 
         Persona.objects.create(
             nombre=nombre,
             apellido=apellido,
             telefono=telefono,
             email=email,
-            direccion=direccion
+            direccion=direccion,
+            imagen=imagen
         )
         return redirect('persona')
 def editarPersona(request, id_persona):
@@ -48,6 +50,7 @@ def editarPersona(request, id_persona):
         persona.telefono = request.POST.get('telefono')
         persona.email = request.POST.get('email')
         persona.direccion = request.POST.get('direccion')
+        persona.imagen = request.FILES['imagen']
         persona.save()
         return redirect('persona')
 
@@ -59,3 +62,7 @@ def eliminarPersona(request, id_persona):
     personaEliminar = Persona.objects.get(id_persona=id_persona)
     personaEliminar.delete()
     return redirect('persona')
+
+def listar_adopciones(request):
+    adopciones = Adopcion.objects.all()
+    return render(request,'adopciones/indexAdopciones.html',{'adopciones':adopciones})

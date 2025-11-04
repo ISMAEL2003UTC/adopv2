@@ -9,6 +9,8 @@ class Persona(models.Model):
     telefono = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     direccion = models.TextField(blank=True, null=True)
+    imagen = models.ImageField(upload_to='personas/', default='personas/default.png')
+
 
     class Meta:
         db_table = 'persona'
