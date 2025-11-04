@@ -51,6 +51,8 @@ def editarPersona(request, id_persona):
         persona.email = request.POST.get('email')
         persona.direccion = request.POST.get('direccion')
         persona.imagen = request.FILES['imagen']
+        if 'imagen' in request.FILES:
+            persona.imagen = request.FILES['imagen']
         persona.save()
         return redirect('persona')
 

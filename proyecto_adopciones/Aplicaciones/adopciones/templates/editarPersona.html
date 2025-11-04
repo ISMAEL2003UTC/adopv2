@@ -5,7 +5,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Editar Persona</h2>
 
-    <form id="formEditarPersona" method="POST" class="shadow p-4 rounded bg-light">
+    <form id="formEditarPersona" method="POST" class="shadow p-4 rounded bg-light"  enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="mb-3">
@@ -33,8 +33,11 @@
             <textarea id="direccion" name="direccion" class="form-control" rows="3">{{ persona.direccion|default:'' }}</textarea>
         </div>
         <div class="mb-3">
-            <label for="imagen" class="form-label">Foto:</label>
-            <input type="file" id="imagen" name="imagen" class="form-control" required>
+            <label for="imagen" class="form-label">Imagen:</label>
+            <input type="file" id="imagen" name="imagen" class="form-control">
+            {% if persona.imagen %}
+                <img src="{{ persona.imagen.url }}" alt="Foto" width="80" height="80" style="object-fit: cover; border-radius: 50%;">
+            {% endif %}
         </div>
 
         <div class="d-flex justify-content-between">

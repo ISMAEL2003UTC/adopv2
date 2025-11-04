@@ -34,7 +34,11 @@
                 <td>{{ personaTemporal.email|default:"-" }}</td>
                 <td>{{ personaTemporal.direccion|default:"-" }}</td>
                 <td>
-                    <img src="{{ personaTemporal.imagen.url }}" alt="Foto" width="50" height="50" style="object-fit: cover; border-radius: 50%;">
+                    <img src="{{ personaTemporal.imagen.url }}" 
+                        alt="Foto" 
+                        width="50" 
+                        height="50" 
+                        style="object-fit: cover; border-radius: 50%;">
                 </td>
                 
                 <td>
