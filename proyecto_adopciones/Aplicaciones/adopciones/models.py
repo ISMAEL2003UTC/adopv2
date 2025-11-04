@@ -36,11 +36,12 @@ class Mascota(models.Model):
 class Adopcion(models.Model):
     id_persona = models.ForeignKey(Persona, on_delete=models.CASCADE, db_column='id_persona')
     id_mascota = models.ForeignKey(Mascota, on_delete=models.CASCADE, db_column='id_mascota')
-    fecha_adopcion = models.DateField(auto_now_add=True)
+    fecha_adopcion = models.DateField()
     observaciones = models.TextField(blank=True, null=True)
 
     class Meta:
-        db_table = 'adopcion'  
+        db_table = 'adopcion'
+        unique_together = ('id_persona', 'id_mascota')  
 
     def __str__(self):
         return f"{self.id_persona} adoptó a {self.id_mascota}"

@@ -365,18 +365,18 @@
       fillColor: "rgba(255, 165, 52, .14)",
     });
   </script>
-
     {% if messages %}
-    {% for messages in messages %}
-    <script>
-    Swal.fire({
-        text: "SE HA AGREGADO EXITOSAMENTE",
-        position: "center",
-        icon: "success",
-        title: "CONFIRMACION",
-    });
-    </script>
-    {% endfor %}          
+      {% for message in messages %}
+        <script>
+          Swal.fire({
+            title: "{{ message.tags|capfirst }}",
+            text: "{{ message }}",
+            icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}info{% endif %}",
+            confirmButtonText: "Aceptar",
+            confirmButtonColor: "{% if message.tags == 'error' %}#dc3545{% else %}#3085d6{% endif %}"
+          });
+        </script>
+      {% endfor %}
     {% endif %}
 
     <style>

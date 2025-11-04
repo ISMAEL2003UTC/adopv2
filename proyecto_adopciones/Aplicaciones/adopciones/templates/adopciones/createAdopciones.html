@@ -1,0 +1,60 @@
+{% extends '../plantilla.html' %}
+{% load static %}
+{% block body %}
+<div class="container mt-5">
+
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="m-0"><i class="fas fa-book-medical me-2"></i> Crear Nuevo Curso</h2>
+        <a href="/listar-adopciones" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Volver a la lista
+        </a>
+    </div>
+
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form action="/guardar-adopciones" method="post">
+                {% csrf_token %}
+                
+
+                <div class="mb-3">
+                    <label for="personas" class="form-label">Nombre Persona</label>
+                    <select name="personas" id="persona" class="form-select" required>
+                        <option value="" selected disabled>Seleccione una Persona</option>
+                        {% for persona in personas %}
+                            <option value="{{ persona.id_persona }}">{{ persona.nombre }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="mascotas" class="form-label">Mascotas</label>
+                    <select name="mascotas" id="mascotas" class="form-select" >
+                        {% for mascota in mascotas %}
+                            <option value="{{ mascota.id }}">{{ mascota.nombre }} </option>
+                        {% endfor %}
+                    </select>
+                    <!-- <small class="form-text text-muted">Puedes seleccionar varios alumnos usando Ctrl (Cmd en Mac).</small> -->
+                </div>
+
+                <div class="mb-3">
+                    <label for="fecha_adopcion" class="form-label">Fecha de Adopcion</label>
+                    <input type="date" name="fecha_adopcion" id="fecha_adopcion" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="observaciones" class="form-label">Observaciones</label>
+                    <textarea name="observaciones" id="observaciones" rows="3" class="form-control" required></textarea>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-1"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
