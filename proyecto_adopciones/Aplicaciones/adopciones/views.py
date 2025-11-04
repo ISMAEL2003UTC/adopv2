@@ -30,14 +30,22 @@ def nuevaMascota(request):
     return render(request, 'nuevaMascota.html')
 
 # apartado para guardar en la bdd ##################################################################
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from .models import Persona
+
 def guardarPersona(request):
     if request.method == 'POST':
-        nombre = request.POST['nombre']
-        apellido = request.POST['apellido']
-        telefono = request.POST.get('telefono')
-        email = request.POST.get('email')
-        direccion = request.POST.get('direccion')
-        imagen = request.FILES['imagen']
+        nombre = request.POST.get('nombre', '').strip()
+        apellido = request.POST.get('apellido', '').strip()
+        telefono = request.POST.get('telefono', '').strip()
+        email = request.POST.get('email', '').strip()
+        direccion = request.POST.get('direccion', '').strip()
+        imagen = request.FILES.get('imagen')  # Evita MultiValueDictKeyError
+
+        if not nombre or not apellido or not email or not direccion or not imagen:
+            messages.error(request, "Por favor, complete todos los campos obligatorios y seleccione una imagen.")
+            return redirect('nuevaPersona')
 
         Persona.objects.create(
             nombre=nombre,
@@ -47,7 +55,12 @@ def guardarPersona(request):
             direccion=direccion,
             imagen=imagen
         )
+
+        messages.success(request, "Persona registrada correctamente.")
         return redirect('persona')
+    else:
+        return redirect('nuevaPersona')
+
 def editarPersona(request, id_persona):
     persona = Persona.objects.get(id_persona=id_persona)
 
@@ -142,8 +155,7 @@ def eliminar_adopciones(request,id):
     adopcion.delete()
     messages.success(request, f'Adopcion de mascota  {nombre} eliminado correctamente')
     return redirect('/listar-adopciones')
-<<<<<<< HEAD
-=======
+
 
 def editar_adopciones(request,id):
     adopciones= Adopcion.objects.get(id=id)
@@ -187,4 +199,3 @@ def procesar_info_adopciones(request):
         messages.success(request, 'Adopción actualizada correctamente.')
         return redirect('/listar-adopciones')
 
->>>>>>> f096ce2743f925f3f07d70c3cdade7d8e3beb1d1

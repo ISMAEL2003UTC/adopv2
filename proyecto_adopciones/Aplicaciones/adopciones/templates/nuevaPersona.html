@@ -80,4 +80,96 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+$(document).ready(function() {
+    // Método para permitir solo letras
+    $.validator.addMethod("lettersonly", function(value, element) {
+        return this.optional(element) || /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value);
+    }, "Solo se permiten letras");
+
+    // Validación del formulario
+    $("#formPersona").validate({
+        rules: {
+            nombre: {
+                required: true,
+                minlength: 2,
+                maxlength: 50,
+                lettersonly: true
+            },
+            apellido: {
+                required: true,
+                minlength: 2,
+                maxlength: 50,
+                lettersonly: true
+            },
+            telefono: {
+                required: true,
+                digits: true,
+                minlength: 9,
+                maxlength: 15
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            direccion: {
+                required: true,
+                minlength: 5,
+                maxlength: 200
+            },
+            imagen: {
+                required: true,
+                extension: "jpg|jpeg|png"
+            }
+        },
+        messages: {
+            nombre: {
+                required: "El nombre no puede estar vacío",
+                minlength: "El nombre debe tener al menos 2 caracteres",
+                maxlength: "El nombre no debe exceder 50 caracteres",
+                lettersonly: "Solo se permiten letras"
+            },
+            apellido: {
+                required: "El apellido no puede estar vacío",
+                minlength: "El apellido debe tener al menos 2 caracteres",
+                maxlength: "El apellido no debe exceder 50 caracteres",
+                lettersonly: "Solo se permiten letras"
+            },
+            telefono: {
+                required: "El teléfono no puede estar vacío",
+                digits: "Solo se permiten números",
+                minlength: "El teléfono debe tener al menos 9 dígitos",
+                maxlength: "El teléfono no debe exceder 15 dígitos"
+            },
+            email: {
+                required: "El correo electrónico no puede estar vacío",
+                email: "Ingrese un correo válido"
+            },
+            direccion: {
+                required: "La dirección no puede estar vacía",
+                minlength: "La dirección debe tener al menos 5 caracteres",
+                maxlength: "La dirección no debe exceder 200 caracteres"
+            },
+            imagen: {
+                required: "Debe seleccionar una imagen",
+                extension: "Solo se permiten archivos JPG, JPEG o PNG"
+            }
+        },
+        errorElement: "span",
+        errorClass: "error text-danger",
+        highlight: function(element) {
+            $(element).addClass("is-invalid");
+        },
+        unhighlight: function(element) {
+            $(element).removeClass("is-invalid");
+        },
+        submitHandler: function(form) {
+            form.submit(); 
+        }
+    });
+});
+</script>
+
+
+
 {% endblock %}

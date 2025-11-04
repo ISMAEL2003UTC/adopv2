@@ -19,13 +19,10 @@ urlpatterns = [
     path('crear-adopciones',views.crear_adopciones),
     path('guardar-adopciones',views.guardar_adopciones),
     path('eliminar-adopciones/<id>',views.eliminar_adopciones),
-<<<<<<< HEAD
     #path('editar-adopciones/<id>',views.editar_adopciones),
     #path('procesar-info-adopciones',views.procesar_info_adopciones),
-=======
     path('editar-adopciones/<id>',views.editar_adopciones),
     path('procesar-info-adopciones',views.procesar_info_adopciones),
->>>>>>> f096ce2743f925f3f07d70c3cdade7d8e3beb1d1
 
     
 ]
