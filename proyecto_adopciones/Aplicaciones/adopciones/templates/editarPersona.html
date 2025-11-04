@@ -5,7 +5,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">Editar Persona</h2>
 
-    <form method="POST" class="shadow p-4 rounded bg-light">
+    <form id="formEditarPersona" method="POST" class="shadow p-4 rounded bg-light">
         {% csrf_token %}
 
         <div class="mb-3">
@@ -35,8 +35,27 @@
 
         <div class="d-flex justify-content-between">
             <a href="{% url 'persona' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <button type="button" class="btn btn-primary" onclick="confirmarEdicion();">Guardar Cambios</button>
         </div>
     </form>
 </div>
+
+<script>
+function confirmarEdicion() {
+    Swal.fire({
+        title: '¿Desea guardar los cambios?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#007bff',
+        cancelButtonColor: '#d33'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formEditarPersona').submit();
+        }
+    });
+}
+</script>
+
 {% endblock %}
