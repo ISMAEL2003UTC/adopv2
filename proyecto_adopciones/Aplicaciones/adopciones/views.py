@@ -169,12 +169,15 @@ def eliminar_adopciones(request, id):
 
 
 
-
-def editar_adopciones(request,id):
-    adopciones= Adopcion.objects.get(id=id)
-    mascotas=Mascota.objects.all()
-    personas=Persona.objects.all()
-    return render(request,'adopciones/editAdopciones.html',{'adopciones':adopciones,'mascotas':mascotas,'personas':personas})
+def editar_adopciones(request, id):
+    adopciones = Adopcion.objects.get(id_adopcion=id)
+    mascotas = Mascota.objects.all()
+    personas = Persona.objects.all()
+    return render(request, 'adopciones/editAdopciones.html', {
+        'adopciones': adopciones,
+        'mascotas': mascotas,
+        'personas': personas
+    })
 
 def procesar_info_adopciones(request):
     if request.method == 'POST':

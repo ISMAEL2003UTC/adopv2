@@ -33,6 +33,7 @@
             </select><br>
             <label for="">Color</label><br>
             <input required placeholder="Ingrese el color" class="form-control" type="text" name="color" id="color" value="{{mascotaEditar.color}}"><br>
+            
             <label for="">Foto</label><br>
             {% if mascotaEditar.foto %}
                 <img src="{{ mascotaEditar.foto.url }}" alt="Foto mascota" width="150"><br>
@@ -61,8 +62,21 @@
     </div>
     
 </div>
-<!--embeber codiog javascript/jquery-->
 
+<script>
+$(document).ready(function() {
+    $("#foto").fileinput({
+        language: 'es',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        maxFileSize: 2048, // 2 MB
+        showPreview: true,
+        showUpload: false,
+        showRemove: true,
+        initialPreviewAsData: true,
+        theme: 'fas'
+    });
+});
+</script>
 <script>
     $("#form_mascota").validate(
         {

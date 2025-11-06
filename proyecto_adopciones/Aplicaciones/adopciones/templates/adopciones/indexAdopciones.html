@@ -98,13 +98,12 @@ $(document).ready(function() {
         pageLength: 5,
         lengthMenu: [5, 10, 25, 50, 100],
         columnDefs: [
-            { orderable: false, targets: 5 } // Desactiva orden en columna Acciones
+            { orderable: false, targets: 5 } 
         ]
     });
 });
 </script>
 
-<!-- Funciones SweetAlert -->
 <script>
 function confirmarEliminacion(id, nombre, urlBase) {
     Swal.fire({
@@ -135,7 +134,7 @@ function confirmarEdicion(id, nombre, urlBase) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = urlBase + id + '/';
+            window.location.href = urlBase + id ;
         }
     });
 }

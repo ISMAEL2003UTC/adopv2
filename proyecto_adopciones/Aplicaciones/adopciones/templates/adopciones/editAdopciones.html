@@ -15,7 +15,7 @@
             <form action="/procesar-info-adopciones" method="post">
                 {% csrf_token %}
                 
-                <input type="hidden" name="id" value="{{ adopciones.id }}">
+                <input type="hidden" name="id" value="{{ adopciones.id_adopcion  }}">
                 
                 <!-- Persona -->
                 <div class="mb-3">
@@ -36,7 +36,7 @@
                     <label for="mascotas" class="form-label">Mascota</label>
                     <select name="mascotas" id="mascotas" class="form-select" required>
                         {% for mascota in mascotas %}
-                            <option value="{{ mascota.id }}" 
+                            <option value="{{ mascota.id_mascota  }}" 
                                 {% if mascota.id == adopciones.id_mascota.id %}selected{% endif %}>
                                 {{ mascota.nombre }}
                             </option>
