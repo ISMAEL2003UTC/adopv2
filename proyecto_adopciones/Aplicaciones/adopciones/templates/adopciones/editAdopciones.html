@@ -12,69 +12,159 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="/procesar-info-adopciones" method="post">
+
+            <!-- ✅ Le puse ID al formulario -->
+            <form id="formEditarAdopcion" action="/procesar-info-adopciones" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 
-                <input type="hidden" name="id" value="{{ adopciones.id_adopcion  }}">
-                
+                <input type="hidden" name="id" value="{{ adopciones.id_adopcion }}">
+
                 <!-- Persona -->
                 <div class="mb-3">
-                    <label for="persona" class="form-label">Nombre Persona</label>
-                    <select name="personas" id="persona" class="form-select" required>
-                        <option value="" disabled>Seleccione una Persona</option>
-                        {% for persona in personas %}
-                            <option value="{{ persona.id_persona }}" 
-                                {% if persona.id_persona == adopciones.id_persona.id_persona %}selected{% endif %}>
-                                {{ persona.nombre }} {{ persona.apellido }}
-                            </option>  
-                        {% endfor %}
-                    </select>
+                    <label for="nombre" class="form-label">Nombre Persona</label>
+                    <input type="text" name="nombre" id="nombre" value="{{adopciones.id_persona.nombre}}" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Nombre Persona</label>
+                    <input type="text" name="apellido" id="apellido" value="{{adopciones.id_persona.apellido}}" class="form-control">
                 </div>
 
                 <!-- Mascota -->
                 <div class="mb-3">
                     <label for="mascotas" class="form-label">Mascota</label>
-                    <select name="mascotas" id="mascotas" class="form-select" required>
-                        {% for mascota in mascotas %}
-                            <option value="{{ mascota.id_mascota  }}" 
-                                {% if mascota.id == adopciones.id_mascota.id %}selected{% endif %}>
-                                {{ mascota.nombre }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                    <input type="text" name="mascotas" id="mascotas" value="{{adopciones.id_mascota.nombre}}" class="form-control">
+                </div>
+
+                <!-- Imagen actual -->
+                <div class="text-center mb-3">
+                    <img id="previewMascota"
+                         src="{{ adopciones.id_mascota.foto.url }}"
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; border:1px solid #ddd;">
+                </div>
+
+                <!-- ✅ Subir nueva foto -->
+                <div class="mb-3">
+                    <label for="foto_mascota" class="form-label">Cambiar Foto</label>
+                    <input type="file" name="foto_mascota" id="foto_mascota" class="form-control" accept="image/*">
                 </div>
 
                 <!-- Fecha -->
                 <div class="mb-3">
                     <label for="fecha_adopcion" class="form-label">Fecha de Adopción</label>
-                    <input 
-                        type="date" 
-                        name="fecha_adopcion" 
-                        id="fecha_adopcion" 
-                        class="form-control" 
-                        value="{{ adopciones.fecha_adopcion|date:'Y-m-d' }}" 
-                        required>
+                    <input type="date"
+                           name="fecha_adopcion"
+                           id="fecha_adopcion"
+                           class="form-control"
+                           value="{{ adopciones.fecha_adopcion|date:'Y-m-d' }}"
+                           required>
                 </div>
 
                 <!-- Observaciones -->
                 <div class="mb-3">
                     <label for="observaciones" class="form-label">Observaciones</label>
-                    <textarea 
-                        name="observaciones" 
-                        id="observaciones" 
-                        rows="3" 
-                        class="form-control" 
-                        required>{{ adopciones.observaciones }}</textarea>
+                    <textarea name="observaciones"
+                              id="observaciones"
+                              rows="3"
+                              class="form-control"
+                              required>{{ adopciones.observaciones }}</textarea>
                 </div>
 
-                <!-- Botón Guardar -->
                 <div class="text-end">
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-save me-1"></i> Guardar Cambios
                     </button>
                 </div>
+
             </form>
+
         </div>
     </div>
 </div>
+
+<!-- ✅ Cambiar imagen al elegir mascota -->
+<script>
+document.getElementById('mascotas').addEventListener('change', function() {
+    const foto = this.options[this.selectedIndex]?.dataset.foto;
+    const img = document.getElementById('previewMascota');
+
+    if (foto) {
+        img.src = foto;
+    }
+});
+</script>
+
+<!-- ✅ Preview de la foto NUEVA subida -->
+<script>
+document.getElementById('foto_mascota').addEventListener('change', function(event) {
+    const img = document.getElementById('previewMascota');
+    img.src = URL.createObjectURL(event.target.files[0]);
+});
+</script>
+
+<!-- ✅ VALIDACIONES JQUERY VALIDATE -->
+<script>
+$(document).ready(function() {
+
+    $.validator.addMethod("noFuture", function(value) {
+        const hoy = new Date();
+        const fechaIngresada = new Date(value);
+        return fechaIngresada <= hoy;
+    }, "La fecha no puede ser futura.");
+
+    $.validator.addMethod("minDate", function(value) {
+        const min = new Date("2000-01-01");
+        const fechaIngresada = new Date(value);
+        return fechaIngresada >= min;
+    }, "La fecha no puede ser menor al año 2000.");
+
+    $("#formEditarAdopcion").validate({
+        rules: {
+            nombre: { required: true, minlength: 3 },
+            apellido: { required: true, minlength: 3 },
+            mascotas: { required: true, minlength: 2 },
+            fecha_adopcion: {
+                required: true,
+                date: true,
+                noFuture: true,
+                minDate: true
+            },
+            observaciones: {
+                required: true,
+                minlength: 5
+            }
+        },
+        messages: {
+            nombre: {
+                required: "Ingrese el nombre",
+                minlength: "Debe tener al menos 3 caracteres"
+            },
+            apellido: {
+                required: "Ingrese el apellido",
+                minlength: "Debe tener al menos 3 caracteres"
+            },
+            mascotas: {
+                required: "Ingrese el nombre de la mascota",
+                minlength: "Debe tener al menos 2 caracteres"
+            },
+            fecha_adopcion: {
+                required: "Seleccione una fecha",
+                date: "Ingrese una fecha válida",
+                noFuture: "La fecha no puede ser futura",
+                minDate: "No puede ser antes del año 2000"
+            },
+            observaciones: {
+                required: "Ingrese una observación",
+                minlength: "Debe tener al menos 5 caracteres"
+            }
+        },
+        errorClass: "error",
+        errorElement: "span",
+        highlight: function(el) { $(el).addClass("error"); },
+        unhighlight: function(el) { $(el).removeClass("error"); }
+    });
+
+});
+</script>
+
 {% endblock %}

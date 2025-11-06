@@ -3,7 +3,6 @@
 {% block body %}
 <div class="container mt-5">
 
-    
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="m-0"><i class="fas fa-book-medical me-2"></i> Crear Nuevo Curso</h2>
         <a href="/listar-adopciones" class="btn btn-secondary">
@@ -11,35 +10,33 @@
         </a>
     </div>
 
-    
     <div class="card shadow-sm">
         <div class="card-body">
-            <form action="/guardar-adopciones" method="post">
+
+            <form id="formAdopciones" action="/guardar-adopciones" method="post">
                 {% csrf_token %}
-                
 
                 <div class="mb-3">
                     <label for="personas" class="form-label">Nombre Persona</label>
                     <select name="personas" id="persona" class="form-select" required>
                         <option value="" selected disabled>Seleccione una Persona</option>
                         {% for persona in personas %}
-                            <option value="{{ persona.id_persona }}">{{ persona.nombre }} </option>
+                            <option value="{{ persona.id_persona }}">{{ persona.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="mascotas" class="form-label">Mascotas</label>
-                    <select name="mascotas" id="mascotas" class="form-select" >
+                    <select name="mascotas" id="mascotas" class="form-select">
                         {% for mascota in mascotas %}
                             <option value="{{ mascota.id_mascota }}">{{ mascota.nombre }}</option>
                         {% endfor %}
                     </select>
-                    <!-- <small class="form-text text-muted">Puedes seleccionar varios alumnos usando Ctrl (Cmd en Mac).</small> -->
                 </div>
 
                 <div class="mb-3">
-                    <label for="fecha_adopcion" class="form-label">Fecha de Adopcion</label>
+                    <label for="fecha_adopcion" class="form-label">Fecha de Adopción</label>
                     <input type="date" name="fecha_adopcion" id="fecha_adopcion" class="form-control" required>
                 </div>
 
@@ -53,8 +50,71 @@
                         <i class="fas fa-save me-1"></i> Guardar
                     </button>
                 </div>
+
             </form>
+
         </div>
     </div>
 </div>
+
+
+<script>
+$(document).ready(function() {
+
+    
+    $.validator.addMethod("noFuture", function(value, element) {
+        const hoy = new Date();
+        const fechaIngresada = new Date(value);
+        return fechaIngresada <= hoy;
+    }, "La fecha no puede ser futura.");
+
+    
+    $.validator.addMethod("minDate", function(value, element) {
+        const min = new Date("2000-01-01");
+        const fechaIngresada = new Date(value);
+        return fechaIngresada >= min;
+    }, "La fecha no puede ser menor al año 2000.");
+
+    $("#formAdopciones").validate({
+        rules: {
+            personas: { required: true },
+            mascotas: { required: true },
+            fecha_adopcion: {
+                required: true,
+                date: true,
+                noFuture: true,
+                minDate: true
+            },
+            observaciones: {
+                required: true,
+                minlength: 5
+            }
+        },
+        messages: {
+            personas: { required: "Seleccione una persona" },
+            mascotas: { required: "Seleccione una mascota" },
+            fecha_adopcion: {
+                required: "Seleccione una fecha",
+                date: "Ingrese una fecha válida",
+                noFuture: "La fecha de adopción no puede ser en el futuro",
+                minDate: "La fecha debe ser desde el año 2000 en adelante"
+            },
+            observaciones: {
+                required: "Ingrese una observación",
+                minlength: "Debe tener al menos 5 caracteres"
+            }
+        },
+        errorClass: "error",
+        errorElement: "span",
+        highlight: function(element) {
+            $(element).addClass("error");
+        },
+        unhighlight: function(element) {
+            $(element).removeClass("error");
+        }
+    });
+
+});
+</script>
+
 {% endblock %}

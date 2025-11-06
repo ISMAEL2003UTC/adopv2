@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
 
 from .models import Persona, Mascota, Adopcion
@@ -136,24 +137,32 @@ def guardar_adopciones(request):
     fecha_adopcion = request.POST.get('fecha_adopcion')
     observaciones = request.POST.get('observaciones')
 
+   
+    imagen = request.FILES.get('imagen')
+
     persona = Persona.objects.get(id_persona=personas_id)
     mascota = Mascota.objects.get(id_mascota=mascotas_id)
 
+    
     if Adopcion.objects.filter(id_persona=persona, id_mascota=mascota).exists():
         messages.error(request, 'Esta persona ya adoptó esta mascota.')
         return redirect('/crear-adopciones')
 
+    
     if Adopcion.objects.filter(id_mascota=mascota).exists():
         messages.error(request, 'Esta mascota ya fue adoptada por otra persona.')
         return redirect('/crear-adopciones')
 
+    
     Adopcion.objects.create(
         id_persona=persona,
         id_mascota=mascota,
         fecha_adopcion=fecha_adopcion,
-        observaciones=observaciones
+        observaciones=observaciones,
+        imagen=imagen  
     )
 
+    
     mascota.estado = 'Adoptada'
     mascota.save()
 
@@ -180,39 +189,32 @@ def editar_adopciones(request, id):
     })
 
 def procesar_info_adopciones(request):
-    if request.method == 'POST':
-        id_adopcion = request.POST.get('id')
-        personas_id = request.POST.get('personas')
-        mascotas_id = request.POST.get('mascotas')
-        fecha_adopcion = request.POST.get('fecha_adopcion')
-        observaciones = request.POST.get('observaciones')
+    if request.method == "POST":
 
-        adopcion = Adopcion.objects.get(id_adopcion=id_adopcion)
-        persona = Persona.objects.get(id_persona=personas_id)
-        mascota = Mascota.objects.get(id_mascota=mascotas_id)
+        id_adopcion = request.POST.get("id")
+        adopcion = get_object_or_404(Adopcion, id_adopcion=id_adopcion)
 
-        if Adopcion.objects.filter(id_persona=persona, id_mascota=mascota).exclude(id_adopcion=adopcion.id_adopcion).exists():
-            messages.error(request, 'Esta persona ya adoptó esta mascota.')
-            return redirect(f'/editar-adopciones/{adopcion.id_adopcion}')
+        persona = adopcion.id_persona
+        mascota = adopcion.id_mascota
 
-        if Adopcion.objects.filter(id_mascota=mascota).exclude(id_adopcion=adopcion.id_adopcion).exists():
-            messages.error(request, 'Esta mascota ya fue adoptada por otra persona.')
-            return redirect(f'/editar-adopciones/{adopcion.id_adopcion}')
+        persona.nombre = request.POST.get("nombre")
+        persona.apellido = request.POST.get("apellido")
+        persona.save()
 
-        adopcion.id_persona = persona
-        adopcion.id_mascota = mascota
-        adopcion.fecha_adopcion = fecha_adopcion
-        adopcion.observaciones = observaciones
-        adopcion.save()
-
-        mascota.estado = 'Adoptada'
+        mascota.nombre = request.POST.get("mascotas")
+        if request.FILES.get("foto_mascota"):
+            mascota.foto = request.FILES["foto_mascota"]
         mascota.save()
 
-        messages.success(request, 'Adopción actualizada correctamente.')
+        adopcion.fecha_adopcion = request.POST.get("fecha_adopcion")
+        adopcion.observaciones = request.POST.get("observaciones")
+        if request.FILES.get("imagen"):
+            adopcion.imagen = request.FILES["imagen"]
+        adopcion.save()
+
+        messages.success(request, "Adopción actualizada correctamente.")
         return redirect('/listar-adopciones')
 
-    
-    # MASCOTA ######################
 
 def guardarMascota(request):
     nombre = request.POST["nombre"]

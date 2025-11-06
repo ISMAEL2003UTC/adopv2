@@ -20,8 +20,10 @@
             <thead class="table-dark">
                 <tr>
                     <th>#</th>
-                    <th>Nombre Persona</th>
+                    <th>Nombre </th>
+                    <th>Apellido</th>
                     <th>Nombre Mascota</th>
+                    <th>Foto Mascota</th>
                     <th>Fecha Adopción</th>
                     <th>Observaciones</th>
                     <th>Acciones</th>
@@ -31,8 +33,20 @@
                 {% for adopcion in adopciones %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ adopcion.id_persona }}</td>
+                    <td>{{ adopcion.id_persona.nombre }}</td>
+                    <td>{{ adopcion.id_persona.apellido }}</td>
                     <td>{{ adopcion.id_mascota.nombre }}</td>
+
+                    
+                    <td>
+                        {% if adopcion.id_mascota.foto %}
+                            <img src="{{ adopcion.id_mascota.foto.url }}" 
+                                 style="width:80px; height:80px; object-fit:cover; border-radius:8px;">
+                        {% else %}
+                            <span class="text-muted">Sin foto</span>
+                        {% endif %}
+                    </td>
+
                     <td>{{ adopcion.fecha_adopcion }}</td>
                     <td>{{ adopcion.observaciones|default:"-" }}</td>
                     <td class="text-nowrap">
@@ -46,7 +60,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center py-4 text-muted">
+                    <td colspan="7" class="text-center py-4 text-muted">
                         <i class="fas fa-exclamation-circle me-2"></i>No hay adopciones registradas
                     </td>
                 </tr>
@@ -98,7 +112,7 @@ $(document).ready(function() {
         pageLength: 5,
         lengthMenu: [5, 10, 25, 50, 100],
         columnDefs: [
-            { orderable: false, targets: 5 } 
+            { orderable: false, targets: 6 }  
         ]
     });
 });

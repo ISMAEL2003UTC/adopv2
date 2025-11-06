@@ -43,7 +43,12 @@ class Adopcion(models.Model):
     id_mascota = models.ForeignKey(Mascota, on_delete=models.CASCADE, db_column='id_mascota')
     fecha_adopcion = models.DateField()
     observaciones = models.TextField(blank=True, null=True)
-
+    imagen = models.ImageField(
+        upload_to='adopciones/',
+        blank=True,
+        null=True,
+        default='adopciones/default.png'
+    )
     class Meta:
         db_table = 'adopcion'
         unique_together = ('id_persona', 'id_mascota')  
