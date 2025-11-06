@@ -13,28 +13,28 @@
 
     <!-- Tabla de Adopciones -->
     <div class="table-responsive">
-        <table class="table table-hover table-bordered">
-            <thead class="table-dark text-center">
+        <table id="tbl_adopciones" class="table table-hover table-bordered align-middle text-center">
+            <thead class="table-dark">
                 <tr>
                     <th>#</th>
                     <th>Nombre Persona</th>
                     <th>Nombre Mascota</th>
-                    <th>Fecha Adopcion</th>
+                    <th>Fecha Adopción</th>
                     <th>Observaciones</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 {% for adopcion in adopciones %}
-                <tr class="text-center">
+                <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ adopcion.id_persona }}</td>
                     <td>{{ adopcion.id_mascota.nombre }}</td>
                     <td>{{ adopcion.fecha_adopcion }}</td>
                     <td>{{ adopcion.observaciones|default:"-" }}</td>
                     <td class="text-nowrap">
-                        <a href="#" onclick="confirmarEdicion('{{ adopcion.id_adopcion }}','{{ adopcion.id_mascota.nombre }}','/editar-adopciones/')" class="btn btn-warning me-1">
-                            <i class="fas fa-edit me-1"></i> Editar
+                        <a href="#" onclick="confirmarEdicion('{{ adopcion.id_adopcion }}','{{ adopcion.id_mascota.nombre }}','/editar-adopciones/')" class="btn btn-warning btn-sm me-1">
+                            <i class="fas fa-edit"></i> Editar
                         </a>
                         <a href="#" onclick="confirmarEliminacion('{{ adopcion.id_adopcion }}','{{ adopcion.id_mascota.nombre }}','/eliminar-adopciones/');" class="btn btn-danger btn-sm">
                             <i class="fa fa-trash"></i> Eliminar
@@ -53,8 +53,55 @@
     </div>
 </div>
 
-<!-- Scripts SweetAlert2 -->
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- DataTables configuración -->
+<script>
+$(document).ready(function() {
+    $('#tbl_adopciones').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="fa fa-copy"></i> Copiar',
+                className: 'btn btn-secondary'
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fa fa-file-excel"></i> Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fa fa-file-pdf"></i> PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> Imprimir',
+                className: 'btn btn-info'
+            },
+            {
+                extend: 'colvis',
+                text: '<i class="fa fa-eye"></i> Filtro',
+                className: 'btn btn-warning'
+            }
+        ],
+        responsive: true,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100],
+        columnDefs: [
+            { orderable: false, targets: 5 } // Desactiva orden en columna Acciones
+        ]
+    });
+});
+</script>
+
+<!-- Funciones SweetAlert -->
 <script>
 function confirmarEliminacion(id, nombre, urlBase) {
     Swal.fire({

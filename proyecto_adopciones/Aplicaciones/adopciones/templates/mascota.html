@@ -66,6 +66,47 @@
     </tbody>
 </table>
 
+<script>
+$(document).ready(function() {
+    $('#tbl_mascotas').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copy',
+                text: '<i class="fa fa-copy"></i> Copiar',
+                className: 'btn btn-secondary'
+            },
+            {
+                extend: 'excel',
+                text: '<i class="fa fa-file-excel"></i> Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdf',
+                text: '<i class="fa fa-file-pdf"></i> PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> Imprimir',
+                className: 'btn btn-info'
+            },
+            {
+                extend: 'colvis',
+                text: '<i class="fa fa-eye"></i> Filtro',
+                className: 'btn btn-warning'
+            }
+        ],
+        responsive: true,
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json"
+        },
+        pageLength: 5,
+        lengthMenu: [5, 10, 25, 50, 100]
+    });
+});
+</script>
+
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
