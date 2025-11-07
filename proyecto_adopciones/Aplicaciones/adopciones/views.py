@@ -104,6 +104,7 @@ def editarPersona(request, id_persona):
 def eliminarPersona(request, id_persona):
     personaEliminar = Persona.objects.get(id_persona=id_persona)
     personaEliminar.delete()
+    messages.success(request, "Persona eliminada exitosamente.")
     return redirect('persona')
 
 def listar_adopciones(request):
