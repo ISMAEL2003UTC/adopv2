@@ -220,17 +220,22 @@ def guardarMascota(request):
     nombre = request.POST["nombre"]
     descripcion = request.POST["descripcion"]
     especie = request.POST["especie"]
+    collar = request.POST["collar"]
     raza = request.POST["raza"]
     edad = request.POST["edad"]
     sexo = request.POST["sexo"]
     color = request.POST["color"]
     estado = request.POST["estado"]
     foto = request.FILES.get("foto")
+    if Mascota.objects.filter(collar=collar).exists():
+        messages.error(request, f"El collar '{collar}' ya está registrado en otra mascota.")
+        return redirect('nuevaMascota')
 
     Mascota.objects.create(
         nombre=nombre,
         descripcion=descripcion,
         especie=especie,
+        collar=collar,
         raza=raza,
         edad=edad,
         sexo=sexo,
@@ -253,6 +258,7 @@ def actualizarMascota(request, id_mascota):
         nombre = request.POST["nombre"]
         descripcion = request.POST["descripcion"]
         especie = request.POST["especie"]
+        collar = request.POST["collar"]
         raza = request.POST["raza"]
         edad = request.POST["edad"]
         sexo = request.POST["sexo"]
@@ -260,9 +266,13 @@ def actualizarMascota(request, id_mascota):
         estado = request.POST["estado"]
 
         mascota = Mascota.objects.get(id_mascota=id_mascota)
+        if Mascota.objects.filter(collar=collar).exclude(id_mascota=id_mascota).exists():
+            messages.error(request, f"El collar '{collar}' ya está registrado en otra mascota.")
+            return redirect(f"/editarMascota/{id_mascota}")
         mascota.nombre = nombre
         mascota.descripcion = descripcion
         mascota.especie = especie
+        mascota.collar = collar
         mascota.raza = raza
         mascota.edad = edad
         mascota.sexo = sexo

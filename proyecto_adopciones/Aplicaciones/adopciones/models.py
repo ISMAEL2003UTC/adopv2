@@ -23,6 +23,7 @@ class Mascota(models.Model):
     id_mascota = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=100, blank=True, null=True)
+    collar = models.CharField(max_length=50, unique=True, blank=True, null=True)
     especie = models.CharField(max_length=50, blank=True, null=True)
     raza = models.CharField(max_length=100, blank=True, null=True)
     edad = models.IntegerField(blank=True, null=True)
@@ -34,7 +35,7 @@ class Mascota(models.Model):
     class Meta:
         db_table = 'mascota'  
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.nombre} ({self.especie})"
 
 class Adopcion(models.Model):
