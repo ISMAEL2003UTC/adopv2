@@ -13,7 +13,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <form id="formAdopciones" action="/guardar-adopciones" method="post">
+            <form id="formAdopciones" action="/guardar-adopciones" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="mb-3">
