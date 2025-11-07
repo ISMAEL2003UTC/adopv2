@@ -13,7 +13,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            
+
             <form id="formEditarAdopcion" action="/procesar-info-adopciones" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 
@@ -36,20 +36,24 @@
                     <input type="text" name="mascotas" id="mascotas" value="{{adopciones.id_mascota.nombre}}" class="form-control">
                 </div>
 
-                <!-- Imagen actual -->
                 <div class="text-center mb-3">
-                    <img id="previewMascota"
-                         src="{{ adopciones.id_mascota.foto.url }}"
-                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; border:1px solid #ddd;">
+                    {% if adopciones.id_mascota.foto %}
+                        <img id="previewMascota"
+                            src="{{ adopciones.id_mascota.foto.url }}"
+                            style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; border:1px solid #ddd;">
+                    {% else %}
+                        <img id="previewMascota"
+                            src="{% static 'img/default_mascota.png' %}"
+                            style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; border:1px solid #ddd;">
+                    {% endif %}
                 </div>
 
-                
+
                 <div class="mb-3">
                     <label for="foto_mascota" class="form-label">Cambiar Foto</label>
                     <input type="file" name="foto_mascota" id="foto_mascota" class="form-control" accept="image/*">
                 </div>
 
-                <!-- Fecha -->
                 <div class="mb-3">
                     <label for="fecha_adopcion" class="form-label">Fecha de Adopción</label>
                     <input type="date"
@@ -60,7 +64,6 @@
                            required>
                 </div>
 
-                <!-- Observaciones -->
                 <div class="mb-3">
                     <label for="observaciones" class="form-label">Observaciones</label>
                     <textarea name="observaciones"
@@ -101,7 +104,21 @@ document.getElementById('foto_mascota').addEventListener('change', function(even
 });
 </script>
 
-<!-- ✅ VALIDACIONES JQUERY VALIDATE -->
+<script>
+$(document).ready(function() {
+    $("#foto_mascota").fileinput({
+        language: 'es',
+        allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+        maxFileSize: 2048, // 2 MB
+        showPreview: true,
+        showUpload: false,
+        showRemove: true,
+        initialPreviewAsData: true,
+        theme: 'fas'
+    });
+});
+</script>
+
 <script>
 $(document).ready(function() {
 

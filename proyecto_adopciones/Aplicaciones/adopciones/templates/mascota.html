@@ -2,10 +2,11 @@
 {% load static %}
 {% block body %}
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"></div>
-<h1 style="margin: 0;">LISTA DE MASCOTAS DISPONIBLES</h1>
-<img src="/media/mascotas/mascotas.png" alt="Icono" style="height: 100px; width: 100px; object-fit: contain;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="margin: 0;">LISTA DE MASCOTAS DISPONIBLES</h1>
+    <img src="/media/mascotas/mascotas.png" alt="Icono" style="height: 100px; width: 100px; object-fit: contain;">
 </div>
+
 
 <div class="row mb-3">
     <div class="col text-end">
@@ -20,8 +21,9 @@
         <tr>
             <th>ID</th>
             <th>Nombre</th>
-            <th>Descripción</th>
+            <th>Desc</th>
             <th>Especie</th>
+            <th>Collar</th>
             <th>Raza</th>
             <th>Edad</th>
             <th>Sexo</th>
@@ -37,12 +39,13 @@
             <tr class="text-center">
                 <td>{{ mascota.id_mascota }}</td>
                 <td>{{ mascota.nombre }}</td>
-                <td>{{ mascota.descripcion|default:"-" }}</td>
-                <td>{{ mascota.especie|default:"-" }}</td>
-                <td>{{ mascota.raza|default:"-" }}</td>
-                <td>{{ mascota.edad|default:"-" }}</td>
-                <td>{{ mascota.sexo|default:"-" }}</td>
-                <td>{{ mascota.color|default:"-" }}</td>
+                <td>{{ mascota.descripcion}}</td>
+                <td>{{ mascota.especie}}</td>
+                <td>{{ mascota.collar}}</td>
+                <td>{{ mascota.raza}}</td>
+                <td>{{ mascota.edad}}</td>
+                <td>{{ mascota.sexo}}</td>
+                <td>{{ mascota.color}}</td>
                 <td>{{ mascota.estado }}</td>
                 <td>
                     {% if mascota.foto %}
@@ -62,9 +65,7 @@
                 </td>
             </tr>
         {% empty %}
-            <tr>
-                <td colspan="11" class="text-center text-muted">No hay mascotas registradas</td>
-            </tr>
+           
         {% endfor %}
     </tbody>
 </table>
@@ -110,8 +111,7 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 function eliminarMascota(id) {
     Swal.fire({

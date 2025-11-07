@@ -9,6 +9,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
+
 
 
 from .models import Persona, Mascota, Adopcion
@@ -255,17 +257,22 @@ def guardarMascota(request):
     nombre = request.POST["nombre"]
     descripcion = request.POST["descripcion"]
     especie = request.POST["especie"]
+    collar = request.POST["collar"]
     raza = request.POST["raza"]
     edad = request.POST["edad"]
     sexo = request.POST["sexo"]
     color = request.POST["color"]
     estado = request.POST["estado"]
     foto = request.FILES.get("foto")
+    if Mascota.objects.filter(collar=collar).exists():
+        messages.error(request, f"El collar '{collar}' ya está registrado en otra mascota.")
+        return redirect('nuevaMascota')
 
     Mascota.objects.create(
         nombre=nombre,
         descripcion=descripcion,
         especie=especie,
+        collar=collar,
         raza=raza,
         edad=edad,
         sexo=sexo,
@@ -288,6 +295,7 @@ def actualizarMascota(request, id_mascota):
         nombre = request.POST["nombre"]
         descripcion = request.POST["descripcion"]
         especie = request.POST["especie"]
+        collar = request.POST["collar"]
         raza = request.POST["raza"]
         edad = request.POST["edad"]
         sexo = request.POST["sexo"]
@@ -295,9 +303,13 @@ def actualizarMascota(request, id_mascota):
         estado = request.POST["estado"]
 
         mascota = Mascota.objects.get(id_mascota=id_mascota)
+        if Mascota.objects.filter(collar=collar).exclude(id_mascota=id_mascota).exists():
+            messages.error(request, f"El collar '{collar}' ya está registrado en otra mascota.")
+            return redirect(f"/editarMascota/{id_mascota}")
         mascota.nombre = nombre
         mascota.descripcion = descripcion
         mascota.especie = especie
+        mascota.collar = collar
         mascota.raza = raza
         mascota.edad = edad
         mascota.sexo = sexo
@@ -317,3 +329,16 @@ def eliminarMascota(request, id_mascota):
     mascotaEliminar.delete()
     messages.success(request, "Mascota eliminada exitosamente.")
     return redirect('/mascota')
+
+### REPORTES #######################################################################
+def reporte_adopciones_persona(request):
+    adopciones_por_persona = Adopcion.objects.values(
+        'id_persona__id_persona',
+        'id_persona__nombre',
+        'id_persona__apellido'
+    ).annotate(total_adopciones=Count('id_adopcion')).order_by('-total_adopciones')
+
+    context = {
+        'adopciones_por_persona': adopciones_por_persona
+    }
+    return render(request, 'adopciones/reporte_adopciones_persona.html', context)

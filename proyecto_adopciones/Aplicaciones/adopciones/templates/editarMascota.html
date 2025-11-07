@@ -20,6 +20,9 @@
             <input required placeholder="Ingrese la descripción" class="form-control" type="text" name="descripcion" id="descripcion" value="{{mascotaEditar.descripcion}}"><br>
             <label for="">Especie</label><br>
             <input required placeholder="Ingrese la especie" class="form-control" type="text" name="especie" id="especie" value="{{mascotaEditar.especie}}"><br>
+            <label for="">Collar</label><br>
+            <input required placeholder="Ingrese el identificador del collar"class="form-control" type="text" name="collar" id="collar"value="{{ mascotaEditar.collar }}"><br>
+
             <label for="">Raza</label><br>
             <input required placeholder="Ingrese la raza" class="form-control" type="text" name="raza" id="raza" value="{{mascotaEditar.raza}}"><br>
 
@@ -38,7 +41,7 @@
             {% if mascotaEditar.foto %}
                 <img src="{{ mascotaEditar.foto.url }}" alt="Foto mascota" width="150"><br>
             {% endif %}
-            <input class="form-control" type="file" name="foto" id="foto" accept=".jpg,.jpeg,.png"><br>
+            <input class="form-control" type="file" name="foto" id="foto" accept="image/jpeg,image/png"><br>
 
             <label>Estado</label>
             <select class="form-control" name="estado">
@@ -94,6 +97,10 @@ $(document).ready(function() {
                     required:true,
                     maxlength:20
                 },
+                "collar":{
+                    required:true,
+                    maxlength:20
+                },
                 "raza":{
                     required:true,
                     maxlength:20
@@ -101,7 +108,7 @@ $(document).ready(function() {
                 edad: {
                     required: true,
                     number: true, 
-                    min: 0,
+                    min: 1,
                     max: 30,
                 },
                 "sexo":{
@@ -133,6 +140,10 @@ $(document).ready(function() {
                 
                 "especie":{
                     required:"Ingrese la especie",
+                    maxlength:"Máximo 20 letras"
+                },
+                "especie":{
+                    required:"Ingrese el identificador del collar",
                     maxlength:"Máximo 20 letras"
                 },
                 "raza":{

@@ -29,6 +29,9 @@ urlpatterns = [
     path('guardarMascota/', views.guardarMascota, name='guardarMascota'),
     path('editarMascota/<id_mascota>', views.editarMascota, name='editarMascota'),
     path('actualizarMascota/<id_mascota>/', views.actualizarMascota, name='actualizarMascota'),
+    #REPORTES ####################################################
+    path('reporte-adopciones-persona/', views.reporte_adopciones_persona, name='reporteAdopcionesPersona'),
+
 
 
 ]
