@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
+
 
 
 from .models import Persona, Mascota, Adopcion
@@ -292,3 +294,16 @@ def eliminarMascota(request, id_mascota):
     mascotaEliminar.delete()
     messages.success(request, "Mascota eliminada exitosamente.")
     return redirect('/mascota')
+
+### REPORTES #######################################################################
+def reporte_adopciones_persona(request):
+    adopciones_por_persona = Adopcion.objects.values(
+        'id_persona__id_persona',
+        'id_persona__nombre',
+        'id_persona__apellido'
+    ).annotate(total_adopciones=Count('id_adopcion')).order_by('-total_adopciones')
+
+    context = {
+        'adopciones_por_persona': adopciones_por_persona
+    }
+    return render(request, 'adopciones/reporte_adopciones_persona.html', context)
