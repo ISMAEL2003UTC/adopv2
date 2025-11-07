@@ -1,7 +1,9 @@
 
+from datetime import datetime
 from django.shortcuts import redirect, render
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db.models import Count
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -215,6 +217,39 @@ def procesar_info_adopciones(request):
         messages.success(request, "Adopción actualizada correctamente.")
         return redirect('/listar-adopciones')
 
+
+
+def reporte_estadistico_adopciones(request):
+
+    especies = (
+        Mascota.objects
+        .values("especie")
+        .annotate(total=Count("adopcion"))
+        .order_by("-total")
+    )
+
+    razas = (
+        Mascota.objects
+        .values("raza")
+        .annotate(total=Count("adopcion"))
+        .order_by("-total")
+    )
+
+    edades = (
+        Mascota.objects
+        .values("edad")
+        .annotate(total=Count("adopcion"))
+        .order_by("-total")
+    )
+
+    fecha_generacion = datetime.now().strftime('%d/%m/%Y %H:%M')
+
+    return render(request, "adopciones/reporteAdopciones.html", {
+        "especies": especies,
+        "razas": razas,
+        "edades": edades,
+        "fecha_generacion": fecha_generacion
+    })
 
 def guardarMascota(request):
     nombre = request.POST["nombre"]

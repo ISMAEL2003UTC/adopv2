@@ -22,6 +22,7 @@ urlpatterns = [
     path('eliminar-adopciones/<id>/', views.eliminar_adopciones, name='eliminar_adopciones'),
     path('editar-adopciones/<id>/',views.editar_adopciones),
     path('procesar-info-adopciones',views.procesar_info_adopciones),
+    path('reporte-estadistico-adopciones', views.reporte_estadistico_adopciones),
     #mascotas #############################################################
     path('eliminarMascota/<id_mascota>', views.eliminarMascota),
     path('nuevaMascota/', views.nuevaMascota, name='nuevaMascota'),

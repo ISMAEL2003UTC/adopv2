@@ -13,7 +13,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <form id="formAdopciones" action="/guardar-adopciones" method="post">
+            <form id="formAdopciones" action="/guardar-adopciones" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="mb-3">
@@ -35,6 +35,12 @@
                     </select>
                 </div>
 
+                
+                <div class="mb-3 text-center">
+                    <img id="previewMascota" src="" alt="Vista previa"
+                         class="img-thumbnail d-none" style="max-width: 180px;">
+                </div>
+
                 <div class="mb-3">
                     <label for="fecha_adopcion" class="form-label">Fecha de Adopción</label>
                     <input type="date" name="fecha_adopcion" id="fecha_adopcion" class="form-control" required>
@@ -44,6 +50,11 @@
                     <label for="observaciones" class="form-label">Observaciones</label>
                     <textarea name="observaciones" id="observaciones" rows="3" class="form-control" required></textarea>
                 </div>
+
+                <!--<div class="mb-3">
+                    <label for="imagen" class="form-label">Imagen de la Adopción</label>
+                    <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
+                </div> -->
 
                 <div class="text-end">
                     <button type="submit" class="btn btn-success">
@@ -57,23 +68,20 @@
     </div>
 </div>
 
-
 <script>
 $(document).ready(function() {
 
-    
     $.validator.addMethod("noFuture", function(value, element) {
         const hoy = new Date();
         const fechaIngresada = new Date(value);
         return fechaIngresada <= hoy;
-    }, "La fecha no puede ser futura.");
+    });
 
-    
     $.validator.addMethod("minDate", function(value, element) {
         const min = new Date("2000-01-01");
         const fechaIngresada = new Date(value);
         return fechaIngresada >= min;
-    }, "La fecha no puede ser menor al año 2000.");
+    });
 
     $("#formAdopciones").validate({
         rules: {
@@ -89,32 +97,32 @@ $(document).ready(function() {
                 required: true,
                 minlength: 5
             }
-        },
-        messages: {
-            personas: { required: "Seleccione una persona" },
-            mascotas: { required: "Seleccione una mascota" },
-            fecha_adopcion: {
-                required: "Seleccione una fecha",
-                date: "Ingrese una fecha válida",
-                noFuture: "La fecha de adopción no puede ser en el futuro",
-                minDate: "La fecha debe ser desde el año 2000 en adelante"
-            },
-            observaciones: {
-                required: "Ingrese una observación",
-                minlength: "Debe tener al menos 5 caracteres"
-            }
-        },
-        errorClass: "error",
-        errorElement: "span",
-        highlight: function(element) {
-            $(element).addClass("error");
-        },
-        unhighlight: function(element) {
-            $(element).removeClass("error");
         }
     });
 
 });
+</script>
+
+
+<script>
+    const mascotasData = {
+        {% for mascota in mascotas %}
+            "{{ mascota.id_mascota }}": "{% if mascota.foto %}{{ mascota.foto.url }}{% else %}/static/sin_foto.png{% endif %}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    };
+
+    $("#mascotas").change(function () {
+        const id = $(this).val();
+        const imagen = mascotasData[id];
+
+        if (imagen) {
+            $("#previewMascota")
+                .attr("src", imagen)
+                .removeClass("d-none");
+        } else {
+            $("#previewMascota").addClass("d-none");
+        }
+    });
 </script>
 
 {% endblock %}

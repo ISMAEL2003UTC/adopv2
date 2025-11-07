@@ -1,0 +1,86 @@
+{% extends '../plantilla.html' %}
+{% block body %}
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">Reporte Estadístico de Adopciones</h2>
+    <p class="text-muted">Generado el: <strong>{{ fecha_generacion }}</strong></p>
+
+    <!-- Tabla Especies -->
+    <h4 class="mt-4">Especies más adoptadas</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Especie</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in especies %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.especie|default:"No especificada" }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">No hay datos</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Tabla Razas -->
+    <h4 class="mt-4">Razas más adoptadas</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-success">
+            <tr>
+                <th>#</th>
+                <th>Raza</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in razas %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.raza|default:"No especificada" }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">No hay datos</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Tabla Edades -->
+    <h4 class="mt-4">Edades más adoptadas</h4>
+    <table class="table table-bordered table-striped">
+        <thead class="table-warning">
+            <tr>
+                <th>#</th>
+                <th>Edad</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in edades %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.edad|default:"No especificada" }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">No hay datos</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

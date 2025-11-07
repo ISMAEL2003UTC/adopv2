@@ -13,7 +13,7 @@
     <div class="card shadow-sm">
         <div class="card-body">
 
-            <!-- ✅ Le puse ID al formulario -->
+            
             <form id="formEditarAdopcion" action="/procesar-info-adopciones" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 
@@ -43,7 +43,7 @@
                          style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; border:1px solid #ddd;">
                 </div>
 
-                <!-- ✅ Subir nueva foto -->
+                
                 <div class="mb-3">
                     <label for="foto_mascota" class="form-label">Cambiar Foto</label>
                     <input type="file" name="foto_mascota" id="foto_mascota" class="form-control" accept="image/*">
@@ -82,7 +82,6 @@
     </div>
 </div>
 
-<!-- ✅ Cambiar imagen al elegir mascota -->
 <script>
 document.getElementById('mascotas').addEventListener('change', function() {
     const foto = this.options[this.selectedIndex]?.dataset.foto;
@@ -94,7 +93,7 @@ document.getElementById('mascotas').addEventListener('change', function() {
 });
 </script>
 
-<!-- ✅ Preview de la foto NUEVA subida -->
+
 <script>
 document.getElementById('foto_mascota').addEventListener('change', function(event) {
     const img = document.getElementById('previewMascota');
