@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 from .import views
 
 urlpatterns = [
+    path('', views.persona, name='home'),
+
     path('persona/', views.persona, name='persona'),
     path('mascota/', views.mascota, name='mascota'),
     path('persona/editarPersona/<int:id_persona>/', views.editarPersona, name='editarPersona'),
@@ -31,6 +33,7 @@ urlpatterns = [
     path('actualizarMascota/<id_mascota>/', views.actualizarMascota, name='actualizarMascota'),
     #REPORTES ####################################################
     path('reporte-adopciones-persona/', views.reporte_adopciones_persona, name='reporteAdopcionesPersona'),
+    path('reporteMascota/', views.reporteMascota, name='reporteMascota'),
 
 
 

@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db.models import Count
 
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.urls import reverse
@@ -342,3 +343,26 @@ def reporte_adopciones_persona(request):
         'adopciones_por_persona': adopciones_por_persona
     }
     return render(request, 'adopciones/reporte_adopciones_persona.html', context)
+
+def reporteMascota(request):
+    especies_adoptadas = (
+        Mascota.objects.filter(estado='Adoptado')
+        .values('especie')
+        .annotate(total=Count('especie'))
+        .order_by('-total')
+    )
+
+    especie_mas_adoptada = None
+    cantidad = 0
+
+    if especies_adoptadas.exists():
+        especie_mas_adoptada = especies_adoptadas[0]['especie']
+        cantidad = especies_adoptadas[0]['total']
+
+    contexto = {
+        'especie_mas_adoptada': especie_mas_adoptada,
+        'cantidad': cantidad,
+        'especies_adoptadas': especies_adoptadas,
+    }
+
+    return render(request, 'reporteMascota.html', contexto)

@@ -13,6 +13,11 @@
         <a href="{% url 'nuevaMascota' %}" class="btn btn-success">
             Agregar Mascota
         </a>
+
+       <a href="{% url 'reporteMascota' %}" class="btn btn-primary">
+    <i class="fa fa-chart-pie"></i> Ver Reporte de Especies
+</a>
+
     </div>
 </div>
 
@@ -130,5 +135,7 @@ function eliminarMascota(id) {
     });
 }
 </script>
+
+
 
 {% endblock %}

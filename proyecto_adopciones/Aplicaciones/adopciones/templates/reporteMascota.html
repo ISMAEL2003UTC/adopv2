@@ -1,0 +1,72 @@
+{% extends './plantilla.html' %}
+{% load static %}
+
+{% block body %}
+<div class="container mt-4">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>📊 Reporte de Especies</h1>
+        <a href="{% url 'mascota' %}" class="btn btn-success">
+            <i class="fa fa-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    {% if especie_mas_adoptada %}
+        <div class="alert alert-info mt-2">
+         <strong>La especie más adoptada es:</strong> {{ especie_mas_adoptada }} 
+            ({{ cantidad }} adopciones)
+        </div>
+    {% endif %}
+
+    {% if especies_adoptadas %}
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="graficoEspecies"></canvas>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-bordered table-striped mt-3">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Especie</th>
+                            <th>Cantidad Adoptadas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in especies_adoptadas %}
+                            <tr class="text-center">
+                                <td>{{ item.especie }}</td>
+                                <td>{{ item.total }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+        <script>
+        const data = {
+            labels: [{% for item in especies_adoptadas %}'{{ item.especie }}',{% endfor %}],
+            datasets: [{
+                label: 'Cantidad de Mascotas Adoptadas por Especie',
+                data: [{% for item in especies_adoptadas %}{{ item.total }},{% endfor %}],
+                borderWidth: 1,
+                backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'],
+            }]
+        };
+
+        new Chart(document.getElementById('graficoEspecies'), {
+            type: 'pie',
+            data: data
+        });
+        </script>
+
+
+
+    {% else %}
+        <div class="alert alert-warning text-center">
+            No hay datos disponibles para el reporte.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
